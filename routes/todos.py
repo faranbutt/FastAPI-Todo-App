@@ -1,15 +1,21 @@
 import sys
 sys.path.append('..')
 from typing import Optional
-from fastapi import Depends, HTTPException, APIRouter
+from fastapi import Depends, HTTPException, APIRouter, Request
 from models import Base,Todos
 from database import SessionLocal, engine
 from sqlalchemy.orm import session,Session
 from pydantic import BaseModel, Field
 from routes.auth import get_current_user, get_user_exceptions
 from routes import auth
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
+
 router = APIRouter(prefix='/todos',tags=['todos'],responses={404:{"description":"Not found"}})
 Base.metadata.create_all(bind=engine)
+
+templates = Jinja2Templates(directory="templates")
 
 def get_db():
     try:
@@ -23,6 +29,11 @@ class TodoModel(BaseModel):
     description: Optional[str]
     priority: int = Field(gt=0,lt=6,description="The priority must be between 1-5")
     complete: bool
+
+@router.get('/test')
+async def test(request:Request):
+    return templates.TemplateResponse('home.html',{"request":request})
+
 
 @router.get('/')
 async def get_todos(db: session = Depends(get_db)):

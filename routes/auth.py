@@ -22,6 +22,7 @@ class CreateUser(BaseModel):
     firstname: str
     lastname: str
     password: str
+    phone_number: str
 
 router = APIRouter(prefix='/auth',tags=['auth'],responses={404:{"description":"User not Authorized"}})
 
@@ -84,6 +85,7 @@ async def create_new_user(create_user: CreateUser, db:Session = Depends(get_db))
     hashedPassword=bcrypt.hashpw((create_user.password.encode('utf-8')),bcrypt.gensalt(rounds=15))
     create_user_model.hased_password = hashedPassword
     create_user_model.is_active = True
+    create_user_model.phone_number = create_user.phone_number
     user =  db.query(Users).filter(Users.email == create_user_model.email).first()
     if user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail='User Already exists')
