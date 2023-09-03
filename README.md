@@ -2,8 +2,11 @@
 
 * A Todo App application programming interface made with FastAPI
 
-## Technologies used:
-* FastAPI,NeonDB 
+## Tech Stack:
+* FastAPI, NeonDB, Jinja
+
+## Deployement:
+https://fastapi-todoapp-7a5f2b543f38.herokuapp.com/todos/test
 
 ## Key Features:
 * Optimized and Fast 🚀
